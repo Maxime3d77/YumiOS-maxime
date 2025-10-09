@@ -71,17 +71,10 @@ jobs:
         if: always()
         shell: bash
         run: |
-          set -euxo pipefail
           source repository/src/config
           NOW="$(date +"%Y-%m-%d")"
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
-          echo "🔍 Listing workspace contents before renaming:"
-          ls -l repository/src/workspace/
-          echo "🛠️ Fixing permissions (if root-owned files)..."
-          sudo chown $USER:$USER repository/src/workspace/*.img || true
-          echo "🚚 Renaming image to ${IMAGE}.img"
-          mv repository/src/workspace/*.img "$IMAGE.img"
-          echo "✅ Image renamed successfully"
+          mv repository/src/workspace/*.img $IMAGE.img
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
 
       - name: Upload failed Logfile
